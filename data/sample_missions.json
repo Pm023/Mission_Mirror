@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Artemis III Shackleton Crater Expedition",
+    "destination": "moon",
+    "duration_days": 10,
+    "difficulty": "intermediate",
+    "commander_name": "Commander Jessica Watkins",
+    "notes": "Demonstration of closed-loop water recovery and regolith storm bunker protocols during coronal mass ejection."
+  },
+  {
+    "title": "Ares Outpost Jezero Winter Dust Storm",
+    "destination": "mars",
+    "duration_days": 20,
+    "difficulty": "expert",
+    "commander_name": "Commander Reid Wiseman",
+    "notes": "Severe photovoltaic array dust coating requiring electrodynamic pulse cleaning and food rationing triage."
+  },
+  {
+    "title": "Cadet Orientation Sprint",
+    "destination": "moon",
+    "duration_days": 10,
+    "difficulty": "beginner",
+    "commander_name": "Flight Cadet Alex",
+    "notes": "Introductory habitat deployment with balanced 100-credit budget allocation."
+  }
+]
+

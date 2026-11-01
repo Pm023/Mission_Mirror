@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MISSION MIRROR — Junior Astronaut Mission Trainer</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Aerospace Mission Control Theme CSS -->
+  <link href="css/style.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Background Ambient Starfield Canvas -->
+  <canvas id="space-starfield-canvas"></canvas>
+
+  <!-- Top Aerospace Navigation Header -->
+  <header class="nasa-header sticky-top py-2 px-3">
+    <div class="container-fluid d-flex justify-content-between align-items-center position-relative" style="z-index: 10;">
+      <div class="d-flex align-items-center gap-3">
+        <a href="#" class="d-flex align-items-center gap-2 text-decoration-none" data-nav-view="landing">
+          <div class="bg-dark border border-cyan rounded-3 p-1 d-flex align-items-center justify-content-center" style="width:38px; height:38px; box-shadow: 0 0 14px rgba(0,242,254,0.3);">
+            <i class="bi bi-compass text-cyan fs-5"></i>
+          </div>
+          <div>
+            <div class="brand-title lh-1">MISSION MIRROR</div>
+            <div class="text-dim font-monospace" style="font-size:0.65rem; letter-spacing:0.12em;">JUNIOR ASTRONAUT TRAINER</div>
+          </div>
+        </a>
+        <span class="brand-badge d-none d-md-inline-block">ECLSS SIMULATOR v1.2</span>
+      </div>
+
+      <!-- Navigation Pill Links -->
+      <nav class="d-none d-lg-flex align-items-center gap-2">
+        <button class="nav-tab-btn active" data-nav-view="landing">
+          <i class="bi bi-house-door"></i> Home
+        </button>
+        <button class="nav-tab-btn" data-nav-view="universe">
+          <i class="bi bi-globe-americas"></i> Explore Universe
+        </button>
+        <button class="nav-tab-btn" data-nav-view="briefing">
+          <i class="bi bi-journal-text"></i> Flight Briefing
+        </button>
+        <button class="nav-tab-btn" data-nav-view="dashboard">
+          <i class="bi bi-speedometer2"></i> Mission Control
+        </button>
+        <button class="nav-tab-btn" data-nav-view="science">
+          <i class="bi bi-mortarboard"></i> Science Explorer
+        </button>
+      </nav>
+
+      <!-- Tactical Controls: Sound, Archive & Live Telemetry Link -->
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn-astro-sound active" id="btn-toggle-sound" title="Toggle Synthesized Mission Audio">
+          <i class="bi bi-volume-up-fill text-cyan"></i> <span class="d-none d-md-inline">AUDIO ON</span>
+        </button>
+        <button class="btn btn-sm btn-astro-secondary" id="btn-open-archive">
+          <i class="bi bi-clock-history me-1"></i>Flight Archive
+        </button>
+        <span id="nav-health-status" class="status-pill healthy" title="FastAPI Simulation Engine Status">
+          <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Telemetry Linked
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="container-fluid px-3 px-lg-4 py-4 position-relative" style="z-index: 5;">
+
+    <!-- VIEW A: LANDING PAGE -->
+    <section id="view-landing" class="view-section">
+      <div class="row align-items-center min-vh-75 py-4">
+        <div class="col-lg-7">
+          <div class="d-inline-flex align-items-center gap-2 mb-3">
+            <span class="badge bg-dark border border-cyan text-cyan font-monospace px-3 py-2" style="box-shadow: 0 0 15px rgba(0,242,254,0.25);">
+              <i class="bi bi-compass text-cyan me-1"></i> ASTRONAUT MISSION TRAINER
+            </span>
+            <span class="text-white small font-monospace fw-bold">INTERACTIVE SIMULATION</span>
+          </div>
+
+          <h1 class="display-4 fw-bold text-white mb-3" style="font-family: var(--font-hud); letter-spacing:-0.01em; line-height: 1.15;">
+            TRAIN AS AN ASTRONAUT.<br>
+            <span style="background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+              MASTER INTERCONNECTED PHYSICS.
+            </span>
+          </h1>
+
+          <p class="lead text-secondary mb-4" style="max-width: 660px; font-size: 1.15rem; line-height: 1.6;">
+            Step into the flight deck of a lunar or Martian surface habitat. Learn to budget scarce resources across life support, protect your 4-person crew against radiation, and discover the power of <strong>Counterfactual Replay</strong>: comparing what happened against an alternative tactical decision.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3 mb-5">
+            <button class="btn btn-astro-primary btn-lg" id="btn-hero-start">
+              <i class="bi bi-rocket-takeoff-fill me-2"></i>Begin Mission Briefing
+            </button>
+            <button class="btn btn-outline-cyan btn-lg" data-nav-view="universe" style="color: #00f2fe !important; border: 1.5px solid #00f2fe !important; background: rgba(0, 242, 254, 0.12) !important;">
+              <i class="bi bi-globe-americas me-2"></i>Explore 3D Universe
+            </button>
+            <button class="btn btn-astro-secondary btn-lg" id="btn-hero-how">
+              <i class="bi bi-info-circle me-2"></i>How Simulator Works
+            </button>
+            <button class="btn btn-astro-secondary btn-lg" data-nav-view="science">
+              <i class="bi bi-mortarboard me-2"></i>Space Science Base
+            </button>
+          </div>
+
+          <!-- 4 Core Pillars -->
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-3">
+              <div class="p-3 astro-card h-100" style="border-top: 3px solid #00f2fe;">
+                <i class="bi bi-pie-chart text-cyan fs-4 mb-2 d-block"></i>
+                <h6 class="fw-bold text-white mb-1" style="font-family: var(--font-title); font-size: 1.05rem;">Resource Triage</h6>
+                <p class="small text-muted mb-0">Balance 100 simulation credits with zero margin for waste.</p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <div class="p-3 astro-card h-100" style="border-top: 3px solid #38bdf8;">
+                <i class="bi bi-diagram-3 text-info fs-4 mb-2 d-block"></i>
+                <h6 class="fw-bold text-white mb-1" style="font-family: var(--font-title); font-size: 1.05rem;">Cascading ECLSS</h6>
+                <p class="small text-muted mb-0">Understand how battery brownouts degrade water recycling and oxygen.</p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <div class="p-3 astro-card h-100" style="border-top: 3px solid #f59e0b;">
+                <i class="bi bi-shield-exclamation text-warning fs-4 mb-2 d-block"></i>
+                <h6 class="fw-bold text-white mb-1" style="font-family: var(--font-title); font-size: 1.05rem;">Crisis Command</h6>
+                <p class="small text-muted mb-0">Mitigate CME storms, crop mold, pressure breaches, and fatigue.</p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <div class="p-3 astro-card h-100" style="border-top: 3px solid #10b981;">
+                <i class="bi bi-arrow-repeat text-success fs-4 mb-2 d-block"></i>
+                <h6 class="fw-bold text-white mb-1" style="font-family: var(--font-title); font-size: 1.05rem;">Counterfactuals</h6>
+                <p class="small text-muted mb-0">Replay the identical scenario with alternative protocols.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Astronaut Holographic Inspection Deck & Live Simulation Telemetry -->
+        <div class="col-lg-5 mt-5 mt-lg-0">
+          <div class="astro-card p-4 position-relative overflow-hidden border-cyan" style="box-shadow: 0 0 35px rgba(0, 242, 254, 0.25);">
+            <!-- Top Header & Badge -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span id="hero-model-status-badge" class="badge bg-dark border border-cyan text-cyan font-monospace px-2 py-1">
+                <i class="bi bi-person-bounding-box text-cyan me-1"></i>3D NASA ASTRONAUT EMU
+              </span>
+              <span class="badge bg-success-subtle text-success border border-success font-monospace" style="font-size:0.7rem;">
+                <i class="bi bi-circle-fill me-1" style="font-size:0.45rem;"></i>INTERACTIVE 3D
+              </span>
+            </div>
+
+            <!-- 3D Astronaut Canvas Container -->
+            <div class="position-relative my-2 rounded-3 overflow-hidden border border-secondary" style="background: radial-gradient(circle at center, #071530 0%, #020409 100%); height: 440px;">
+              <div id="hero-astronaut-canvas-container" class="w-100 h-100" style="cursor: grab;"></div>
+
+              <!-- Floating Suit Telemetry Badges -->
+              <div class="position-absolute top-0 start-0 m-2 p-1 px-2 rounded bg-dark border border-secondary text-dim font-monospace" style="font-size: 0.65rem; background: rgba(3,6,17,0.85); backdrop-filter: blur(8px);">
+                <i class="bi bi-shield-check text-cyan me-1"></i>SUIT: ARMORED MULTI-LAYER
+              </div>
+              <div class="position-absolute top-0 end-0 m-2 p-1 px-2 rounded bg-dark border border-secondary text-dim font-monospace" style="font-size: 0.65rem; background: rgba(3,6,17,0.85); backdrop-filter: blur(8px);">
+                <i class="bi bi-lightning-charge-fill text-warning me-1"></i>PLSS: 100% LIFE SUPPORT
+              </div>
+              <div class="position-absolute bottom-0 start-0 m-2 p-1 px-2 rounded bg-dark border border-secondary text-dim font-monospace" style="font-size: 0.65rem; background: rgba(3,6,17,0.85); backdrop-filter: blur(8px);">
+                <i class="bi bi-thermometer-half text-info me-1"></i>CORE: 37.0&deg;C NOMINAL
+              </div>
+              <div class="position-absolute bottom-0 end-0 m-2 p-1 px-2 rounded bg-dark border border-secondary text-dim font-monospace" style="font-size: 0.65rem; background: rgba(3,6,17,0.85); backdrop-filter: blur(8px);">
+                <i class="bi bi-arrows-move text-cyan me-1"></i>360&deg; DRAG TO ROTATE
+              </div>
+            </div>
+
+            <!-- Interactive Action Row -->
+            <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+              <button class="btn btn-astro-primary flex-grow-1 py-2 font-monospace" id="btn-hero-launch-eva" style="box-shadow: 0 0 20px rgba(0, 242, 254, 0.45);">
+                <i class="bi bi-person-walking me-1"></i>LAUNCH 3D ASTRONAUT EVA
+              </button>
+              <button class="btn btn-outline-cyan font-monospace py-2 px-3" data-nav-view="universe" title="View in 3D Solar System" style="color: #00f2fe !important; border: 1.5px solid #00f2fe !important; background: rgba(0, 242, 254, 0.12) !important;">
+                <i class="bi bi-globe-americas me-1 text-cyan"></i>3D Universe
+              </button>
+            </div>
+
+            <!-- Collapsible Mission Telemetry Sample Accordion -->
+            <div class="mt-3 pt-2 border-top border-secondary">
+              <div class="d-flex justify-content-between align-items-center" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#sample-mission-collapse">
+                <span class="text-dim font-monospace small"><i class="bi bi-speedometer2 text-cyan me-1"></i>Baseline Outpost Telemetry</span>
+                <i class="bi bi-chevron-down text-dim small"></i>
+              </div>
+              <div class="collapse show mt-2" id="sample-mission-collapse">
+                <div class="row g-2 font-monospace" style="font-size: 0.75rem;">
+                  <div class="col-6">
+                    <div class="p-2 rounded bg-dark border border-secondary">
+                      <span class="text-dim d-block" style="font-size:0.65rem;">O2 BUFFER</span>
+                      <strong class="text-cyan">88.4%</strong>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 rounded bg-dark border border-secondary">
+                      <span class="text-dim d-block" style="font-size:0.65rem;">WATER RECOVERY</span>
+                      <strong class="text-info">92.0%</strong>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 rounded bg-dark border border-secondary">
+                      <span class="text-dim d-block" style="font-size:0.65rem;">ENERGY GRID</span>
+                      <strong class="text-warning">64.5%</strong>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 rounded bg-dark border border-secondary">
+                      <span class="text-dim d-block" style="font-size:0.65rem;">CREW HEALTH</span>
+                      <strong class="text-success">95.0%</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- VIEW B: MISSION BRIEFING -->
+    <section id="view-briefing" class="view-section d-none">
+      <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <div class="text-cyan font-monospace small mb-1" style="letter-spacing:0.1em;">STAGE 1 &bull; FLIGHT BRIEFING</div>
+              <h2 class="fw-bold text-white mb-0" style="font-family: var(--font-hud);">Configure Your Expedition</h2>
+            </div>
+            <button class="btn btn-astro-secondary" data-nav-view="landing">
+              <i class="bi bi-arrow-left me-1"></i>Back
+            </button>
+          </div>
+
+          <!-- Commander Call-Sign -->
+          <div class="astro-card p-4 mb-4">
+            <label class="form-label text-muted small text-uppercase font-monospace">Flight Commander Name / Tactical Call-Sign</label>
+            <div class="input-group">
+              <span class="input-group-text bg-dark border-secondary text-info font-monospace"><i class="bi bi-person-badge"></i></span>
+              <input type="text" id="input-commander-name" class="form-control bg-dark border-secondary text-white font-monospace" placeholder="e.g. Commander Shepard" value="Cadet Explorer">
+            </div>
+          </div>
+
+          <!-- Destination Selector -->
+          <div class="mb-4">
+            <label class="form-label text-muted small text-uppercase font-monospace mb-2">1. Select Planetary Destination</label>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="astro-card p-3 dest-card selected h-100" data-destination="moon">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold text-white mb-0" style="font-family: var(--font-title); font-size:1.15rem;">
+                      <i class="bi bi-moon-stars text-cyan me-1"></i>The Moon (Artemis)
+                    </h5>
+                    <span class="badge bg-cyan text-dark font-monospace fw-bold" style="font-size:0.65rem;">1/6th g</span>
+                  </div>
+                  <p class="small text-secondary mb-3">Shackleton Crater rim. Extreme thermal swings (+120&deg;C to -130&deg;C). Vacuum environment with abrasive silicate regolith dust and polar cold trap water ice.</p>
+                  <div class="d-flex flex-wrap gap-1 small mt-auto">
+                    <span class="badge bg-dark border border-secondary text-light font-monospace" style="font-size:0.65rem;"><i class="bi bi-shield-slash me-1"></i>Zero Atmos</span>
+                    <span class="badge bg-dark border border-secondary text-warning font-monospace" style="font-size:0.65rem;"><i class="bi bi-sun me-1"></i>Solar Vacuum</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="astro-card p-3 dest-card h-100" data-destination="mars">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold text-white mb-0" style="font-family: var(--font-title); font-size:1.15rem;">
+                      <i class="bi bi-circle-fill text-danger me-1"></i>Mars (Ares Base)
+                    </h5>
+                    <span class="badge bg-danger text-white font-monospace fw-bold" style="font-size:0.65rem;">3/8th g</span>
+                  </div>
+                  <p class="small text-secondary mb-3">Jezero Crater outpost. Thin carbon dioxide atmosphere (0.6% Earth pressure), sub-zero chills (-63&deg;C), and seasonal dust storms that obscure photovoltaic arrays.</p>
+                  <div class="d-flex flex-wrap gap-1 small mt-auto">
+                    <span class="badge bg-dark border border-secondary text-light font-monospace" style="font-size:0.65rem;"><i class="bi bi-wind me-1"></i>Dust Storms</span>
+                    <span class="badge bg-dark border border-secondary text-info font-monospace" style="font-size:0.65rem;"><i class="bi bi-cloud-snow me-1"></i>ISRU In-Situ</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="astro-card p-3 dest-card h-100" data-destination="station">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold text-white mb-0" style="font-family: var(--font-title); font-size:1.15rem;">
+                      <i class="bi bi-hdd-network text-info me-1"></i>Space Station (ISS)
+                    </h5>
+                    <span class="badge bg-info text-dark font-monospace fw-bold" style="font-size:0.65rem;">0.0 g Microgravity</span>
+                  </div>
+                  <p class="small text-secondary mb-3">Low Earth Orbit research platform (420 km altitude). Continuous 90-minute orbital day/night cycles, closed-loop ECLSS recycling, and panoramic Cupola viewing bay.</p>
+                  <div class="d-flex flex-wrap gap-1 small mt-auto">
+                    <span class="badge bg-dark border border-secondary text-info font-monospace" style="font-size:0.65rem;"><i class="bi bi-arrow-repeat me-1"></i>98% Water Loop</span>
+                    <span class="badge bg-dark border border-secondary text-light font-monospace" style="font-size:0.65rem;"><i class="bi bi-globe me-1"></i>LEO Orbit</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Duration & Difficulty -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="astro-card p-4 h-100">
+                <label class="form-label text-muted small text-uppercase font-monospace mb-2">2. Expedition Duration</label>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-astro-secondary flex-grow-1 btn-duration active" data-days="10">10 Days<br><small class="text-dim">Sprint</small></button>
+                  <button type="button" class="btn btn-astro-secondary flex-grow-1 btn-duration" data-days="20">20 Days<br><small class="text-dim">Standard</small></button>
+                  <button type="button" class="btn btn-astro-secondary flex-grow-1 btn-duration" data-days="30">30 Days<br><small class="text-dim">Extended</small></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="astro-card p-4 h-100">
+                <label class="form-label text-muted small text-uppercase font-monospace mb-2">3. Training Difficulty</label>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-astro-secondary flex-grow-1 btn-difficulty" data-difficulty="beginner">Beginner<br><small class="text-dim">Forgiving</small></button>
+                  <button type="button" class="btn btn-astro-secondary flex-grow-1 btn-difficulty active" data-difficulty="intermediate">Intermediate<br><small class="text-dim">Realistic</small></button>
+                  <button type="button" class="btn btn-astro-secondary flex-grow-1 btn-difficulty" data-difficulty="expert">Expert<br><small class="text-dim">Harsh</small></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Crew Flight Objectives Preview -->
+          <div class="astro-card p-4 mb-4">
+            <h6 class="fw-bold text-white text-uppercase font-monospace mb-3">Primary Mission Flight Objectives</h6>
+            <div class="row g-2">
+              <div class="col-md-3 col-sm-6">
+                <div class="p-3 bg-dark rounded border border-secondary small">
+                  <i class="bi bi-heart-pulse-fill text-danger me-1"></i>
+                  <span class="text-light fw-bold font-monospace">Crew Health > 60%</span>
+                  <div class="text-dim mt-1" style="font-size:0.75rem;">Protect astronauts against hypoxia, dehydration & radiation.</div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <div class="p-3 bg-dark rounded border border-secondary small">
+                  <i class="bi bi-water text-cyan me-1"></i>
+                  <span class="text-light fw-bold font-monospace">ECLSS Loop Closure</span>
+                  <div class="text-dim mt-1" style="font-size:0.75rem;">Maintain water & O2 recycling efficiency above 65%.</div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <div class="p-3 bg-dark rounded border border-secondary small">
+                  <i class="bi bi-lightning-charge text-warning me-1"></i>
+                  <span class="text-light fw-bold font-monospace">Energy Continuity</span>
+                  <div class="text-dim mt-1" style="font-size:0.75rem;">Prevent brownout collapses; keep battery buffer > 30%.</div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <div class="p-3 bg-dark rounded border border-secondary small">
+                  <i class="bi bi-shield-check text-success me-1"></i>
+                  <span class="text-light fw-bold font-monospace">Hull Integrity > 70%</span>
+                  <div class="text-dim mt-1" style="font-size:0.75rem;">Preserve airlock pressure seals and micrometeorite shielding.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action -->
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-astro-primary btn-lg" id="btn-proceed-to-planner">
+              Proceed to Outpost Planner <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- VIEW C: OUTPOST PLANNER -->
+    <section id="view-planner" class="view-section d-none">
+      <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+          <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-2">
+            <div>
+              <div class="text-cyan font-monospace small mb-1" style="letter-spacing:0.1em;">STAGE 2 &bull; BUDGET ALLOCATION</div>
+              <h2 class="fw-bold text-white mb-0" style="font-family: var(--font-hud);">Outpost Resource Planner</h2>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="telemetry-tag" id="planner-meta-dest">MOON</span>
+              <span class="telemetry-tag" id="planner-meta-diff">INTERMEDIATE</span>
+              <span class="telemetry-tag" id="planner-meta-days">10 DAYS</span>
+            </div>
+          </div>
+
+          <!-- Budget Banner with Projected Stability -->
+          <div class="astro-card p-4 mb-4 border-cyan">
+            <div class="row align-items-center">
+              <div class="col-md-5 mb-3 mb-md-0">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="p-3 rounded-3 bg-dark border border-cyan text-cyan" style="box-shadow: 0 0 15px rgba(0,242,254,0.25);">
+                    <i class="bi bi-wallet2 fs-2"></i>
+                  </div>
+                  <div>
+                    <div class="text-muted small font-monospace text-uppercase">Budget (Fictional Simulation Credits)</div>
+                    <div class="display-6 fw-bold text-white font-monospace" id="planner-budget-total">100 / 100 Credits</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-6 text-center">
+                <div class="text-muted small font-monospace text-uppercase mb-1">Remaining Credits:</div>
+                <div class="fs-4 font-monospace text-success fw-bold" id="planner-budget-remaining">0 Credits</div>
+              </div>
+              <div class="col-md-4 col-6 text-end">
+                <div class="text-muted small font-monospace text-uppercase mb-1">Projected Stability:</div>
+                <div class="fs-4 font-monospace text-success fw-bold" id="planner-projected-stability">85% Stability</div>
+                <div id="planner-budget-warning" class="text-danger small mt-1 d-none font-monospace"></div>
+              </div>
+            </div>
+
+            <!-- Presets Bar -->
+            <div class="border-top border-secondary mt-3 pt-3 d-flex flex-wrap align-items-center gap-2">
+              <span class="text-muted small font-monospace me-2">Quick Strategic Presets:</span>
+              <button class="btn btn-sm btn-astro-secondary btn-preset" data-preset="balanced">
+                <i class="bi bi-sliders me-1"></i>Balanced Colony
+              </button>
+              <button class="btn btn-sm btn-astro-secondary btn-preset" data-preset="power_heavy">
+                <i class="bi bi-lightning-charge me-1"></i>Power & Shields
+              </button>
+              <button class="btn btn-sm btn-astro-secondary btn-preset" data-preset="eclss_focus">
+                <i class="bi bi-recycle me-1"></i>ECLSS Closed-Loop
+              </button>
+              <button class="btn btn-sm btn-astro-secondary btn-preset" data-preset="resilient">
+                <i class="bi bi-tools me-1"></i>Scrappy Reserves
+              </button>
+            </div>
+          </div>
+
+          <!-- 6 Allocation Sectors -->
+          <div class="row g-3 mb-4">
+            <!-- 1. Life Support -->
+            <div class="col-md-6">
+              <div class="astro-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fw-bold text-white" style="font-family: var(--font-title); font-size:1.05rem;">
+                    <i class="bi bi-lungs text-info me-2"></i>1. Life Support (ECLSS O2)
+                  </span>
+                  <div class="input-group input-group-sm" style="width:110px;">
+                    <input type="number" id="input-life_support" class="form-control bg-dark border-secondary text-cyan text-center font-monospace" min="0" max="100" value="20">
+                    <span class="input-group-text bg-dark border-secondary text-dim font-monospace">cr</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-life_support" class="form-range" min="0" max="100" value="20">
+                <div class="small text-secondary mt-2 p-2 rounded bg-dark border border-secondary" id="desc-life_support">
+                  Nominal ECLSS: Reliable CO2 scrubbing and balanced daily oxygen electrolysis.
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Power Generation -->
+            <div class="col-md-6">
+              <div class="astro-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fw-bold text-white" style="font-family: var(--font-title); font-size:1.05rem;">
+                    <i class="bi bi-lightning-charge-fill text-warning me-2"></i>2. Power Generation (Grid)
+                  </span>
+                  <div class="input-group input-group-sm" style="width:110px;">
+                    <input type="number" id="input-power_generation" class="form-control bg-dark border-secondary text-cyan text-center font-monospace" min="0" max="100" value="25">
+                    <span class="input-group-text bg-dark border-secondary text-dim font-monospace">cr</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-power_generation" class="form-range" min="0" max="100" value="25">
+                <div class="small text-secondary mt-2 p-2 rounded bg-dark border border-secondary" id="desc-power_generation">
+                  Balanced grid: Photovoltaics backed by regenerative fuel cell storage.
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Water Recycling -->
+            <div class="col-md-6">
+              <div class="astro-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fw-bold text-white" style="font-family: var(--font-title); font-size:1.05rem;">
+                    <i class="bi bi-water text-cyan me-2"></i>3. Water Recycling (Closed Loop)
+                  </span>
+                  <div class="input-group input-group-sm" style="width:110px;">
+                    <input type="number" id="input-water_recycling" class="form-control bg-dark border-secondary text-cyan text-center font-monospace" min="0" max="100" value="20">
+                    <span class="input-group-text bg-dark border-secondary text-dim font-monospace">cr</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-water_recycling" class="form-range" min="0" max="100" value="20">
+                <div class="small text-secondary mt-2 p-2 rounded bg-dark border border-secondary" id="desc-water_recycling">
+                  Closed-loop nominal: Vacuum compression filtration recovering ~85% of graywater.
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Food Production -->
+            <div class="col-md-6">
+              <div class="astro-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fw-bold text-white" style="font-family: var(--font-title); font-size:1.05rem;">
+                    <i class="bi bi-flower1 text-success me-2"></i>4. Food Production (Greenhouse)
+                  </span>
+                  <div class="input-group input-group-sm" style="width:110px;">
+                    <input type="number" id="input-food_production" class="form-control bg-dark border-secondary text-cyan text-center font-monospace" min="0" max="100" value="15">
+                    <span class="input-group-text bg-dark border-secondary text-dim font-monospace">cr</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-food_production" class="form-range" min="0" max="100" value="15">
+                <div class="small text-secondary mt-2 p-2 rounded bg-dark border border-secondary" id="desc-food_production">
+                  Hydroponic balance: Active aeroponic trays provide fresh greens and calorie offset.
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Radiation Protection -->
+            <div class="col-md-6">
+              <div class="astro-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fw-bold text-white" style="font-family: var(--font-title); font-size:1.05rem;">
+                    <i class="bi bi-shield-shaded text-primary me-2"></i>5. Radiation Protection (Regolith)
+                  </span>
+                  <div class="input-group input-group-sm" style="width:110px;">
+                    <input type="number" id="input-radiation_protection" class="form-control bg-dark border-secondary text-cyan text-center font-monospace" min="0" max="100" value="10">
+                    <span class="input-group-text bg-dark border-secondary text-dim font-monospace">cr</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-radiation_protection" class="form-range" min="0" max="100" value="10">
+                <div class="small text-secondary mt-2 p-2 rounded bg-dark border border-secondary" id="desc-radiation_protection">
+                  Regolith barrier: 2-meter compacted soil overburden; blocks secondary cosmic particles.
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Emergency Reserves -->
+            <div class="col-md-6">
+              <div class="astro-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fw-bold text-white" style="font-family: var(--font-title); font-size:1.05rem;">
+                    <i class="bi bi-tools text-danger me-2"></i>6. Emergency Reserves (Spares)
+                  </span>
+                  <div class="input-group input-group-sm" style="width:110px;">
+                    <input type="number" id="input-emergency_reserves" class="form-control bg-dark border-secondary text-cyan text-center font-monospace" min="0" max="100" value="10">
+                    <span class="input-group-text bg-dark border-secondary text-dim font-monospace">cr</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-emergency_reserves" class="form-range" min="0" max="100" value="10">
+                <div class="small text-secondary mt-2 p-2 rounded bg-dark border border-secondary" id="desc-emergency_reserves">
+                  Standard inventory: 2-3 spare cartridges and medical kits for rapid triage.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deploy Outpost Button -->
+          <div class="d-flex justify-content-between align-items-center">
+            <button class="btn btn-astro-secondary" data-nav-view="briefing">
+              <i class="bi bi-arrow-left me-1"></i>Back to Briefing
+            </button>
+            <button class="btn btn-astro-primary btn-lg" id="btn-confirm-deploy">
+              <i class="bi bi-rocket-takeoff me-1"></i>Confirm & Deploy Outpost
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- VIEW D: MISSION CONTROL DASHBOARD -->
+    <section id="view-dashboard" class="view-section d-none">
+      <!-- HUD Top Bar -->
+      <div class="astro-card p-3 mb-3">
+        <div class="row align-items-center g-2">
+          <div class="col-md-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="bg-dark p-2 border border-secondary rounded-3 text-cyan">
+                <i class="bi bi-calendar-check fs-4"></i>
+              </div>
+              <div>
+                <div class="text-dim small font-monospace">MISSION PROGRESS</div>
+                <div class="fs-5 fw-bold text-white font-monospace" id="hud-day-counter">Day 1 / 10</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="d-flex justify-content-between small text-muted font-monospace mb-1">
+              <span>EXPEDITION ELAPSED</span>
+              <span id="hud-destination" class="text-cyan fw-bold">MOON</span>
+            </div>
+            <div class="astro-progress">
+              <div id="hud-day-progress" class="astro-progress-bar healthy" style="width: 10%;"></div>
+            </div>
+          </div>
+
+          <div class="col-md-2 text-md-center">
+            <div class="text-dim small font-monospace">LIVE SCORE</div>
+            <div class="fs-4 fw-bold text-cyan font-monospace" id="hud-score">100</div>
+          </div>
+
+          <div class="col-md-4 text-md-end d-flex justify-content-md-end gap-2 flex-wrap">
+            <button class="btn btn-astro-secondary btn-sm" id="btn-cadet-tour" title="Guided Walkthrough">
+              <i class="bi bi-mortarboard text-info me-1"></i>Tour
+            </button>
+            <button class="btn btn-astro-secondary btn-sm" id="btn-toggle-mentor">
+              <i class="bi bi-robot text-cyan me-1"></i>AI Mentor
+            </button>
+            <button class="btn btn-outline-cyan btn-sm" id="btn-dashboard-eva" title="Deploy Astronaut for 3D Surface / Station EVA" style="color: #00f2fe !important; border-color: #00f2fe !important;">
+              <i class="bi bi-person-walking text-cyan me-1"></i>3D EVA
+            </button>
+            <button class="btn btn-astro-secondary btn-sm" id="btn-auto-advance" title="Toggle Auto Simulation Run">
+              <i class="bi bi-play-fill me-1"></i>Auto Run
+            </button>
+            <button class="btn btn-astro-primary btn-sm" id="btn-advance-day">
+              <i class="bi bi-fast-forward-fill me-1"></i>Advance Day (+24h)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Critical Warnings Banner -->
+      <div id="hud-critical-warnings" class="mb-3 d-none"></div>
+
+      <!-- 3D Astronaut EVA Dispatch Command Banner -->
+      <div class="astro-card p-3 mb-4 border-cyan" style="background: linear-gradient(135deg, rgba(7, 13, 30, 0.95) 0%, rgba(14, 28, 60, 0.85) 100%); box-shadow: 0 0 25px rgba(0, 242, 254, 0.15);">
+        <div class="row align-items-center g-3">
+          <div class="col-lg-8">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-circle p-2 border border-cyan text-cyan d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; background: rgba(0, 242, 254, 0.1); box-shadow: 0 0 15px rgba(0, 242, 254, 0.35);">
+                <i class="bi bi-person-walking fs-3"></i>
+              </div>
+              <div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-primary-subtle text-cyan border border-cyan font-monospace">3D EVA FIELD COMMAND</span>
+                  <span class="text-dim font-monospace small">REAL-TIME SURFACE & STATION INTERACTION</span>
+                </div>
+                <h5 class="fw-bold text-white font-monospace mb-1 mt-1">Deploy 3D Astronaut for Field Exploration & Objectives</h5>
+                <p class="text-secondary small mb-0">Walk across terrain in third-person 3D, inspect real spacecraft arrays, diagnose systems, and resolve EVA objectives with real-time score boosts.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 text-lg-end d-flex justify-content-lg-end gap-2">
+            <button class="btn btn-astro-primary btn-lg font-monospace w-100 w-lg-auto" id="btn-dashboard-launch-eva" style="box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);">
+              <i class="bi bi-rocket-takeoff me-2"></i>Enter 3D EVA World
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Gauges Grid (Row 1) -->
+      <div class="row g-3 mb-3">
+        <div class="col-xl-2 col-md-4 col-sm-6">
+          <div class="metric-box">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="metric-label"><i class="bi bi-lungs text-info me-1"></i>Oxygen</span>
+              <span class="badge bg-dark border border-secondary text-cyan small font-monospace" title="Cabin atmospheric pO2 buffer">ECLSS</span>
+            </div>
+            <div class="metric-value" id="val-oxygen">100.0%</div>
+            <div class="astro-progress"><div id="bar-oxygen" class="astro-progress-bar healthy" style="width:100%;"></div></div>
+          </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+          <div class="metric-box">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="metric-label"><i class="bi bi-water text-cyan me-1"></i>Water</span>
+              <span class="badge bg-dark border border-secondary text-cyan small font-monospace" title="Potable reservoir & filtration loop">Buffer</span>
+            </div>
+            <div class="metric-value" id="val-water">100.0%</div>
+            <div class="astro-progress"><div id="bar-water" class="astro-progress-bar healthy" style="width:100%;"></div></div>
+          </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+          <div class="metric-box">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="metric-label"><i class="bi bi-flower1 text-success me-1"></i>Food Rations</span>
+              <span class="badge bg-dark border border-secondary text-cyan small font-monospace" title="Packaged meals & hydroponic yields">Calories</span>
+            </div>
+            <div class="metric-value" id="val-food">100.0%</div>
+            <div class="astro-progress"><div id="bar-food" class="astro-progress-bar healthy" style="width:100%;"></div></div>
+          </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+          <div class="metric-box">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="metric-label"><i class="bi bi-lightning-charge text-warning me-1"></i>Energy Grid</span>
+              <span class="badge bg-dark border border-secondary text-cyan small font-monospace" title="Battery storage & generation">Battery</span>
+            </div>
+            <div class="metric-value" id="val-energy">100.0%</div>
+            <div class="astro-progress"><div id="bar-energy" class="astro-progress-bar healthy" style="width:100%;"></div></div>
+          </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+          <div class="metric-box">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="metric-label"><i class="bi bi-heart-pulse text-danger me-1"></i>Crew Health</span>
+              <span class="badge bg-dark border border-secondary text-cyan small font-monospace" title="Vitals, hydration & radiation tolerance">Vitals</span>
+            </div>
+            <div class="metric-value" id="val-crew-health">100.0%</div>
+            <div class="astro-progress"><div id="bar-crew-health" class="astro-progress-bar healthy" style="width:100%;"></div></div>
+          </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+          <div class="metric-box">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="metric-label"><i class="bi bi-gear-wide-connected text-primary me-1"></i>Systems</span>
+              <span class="badge bg-dark border border-secondary text-cyan small font-monospace" title="Composite spacecraft integrity">Hardware</span>
+            </div>
+            <div class="metric-value" id="val-systems">100.0%</div>
+            <div class="astro-progress"><div id="bar-systems" class="astro-progress-bar healthy" style="width:100%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Habitat Architectural Cutaway Blueprint (Dynamic Feature) -->
+      <div class="astro-card p-3 mb-3">
+        <div class="card-header-astro px-0 pt-0 mb-2 border-0">
+          <span><i class="bi bi-building-gear text-cyan me-2"></i>Outpost Habitat Architecture & Module Status</span>
+          <span class="text-dim small font-monospace">CLICK ANY MODULE TO INSPECT SUBSYSTEM HARDWARE</span>
+        </div>
+        <div class="habitat-cutaway-container">
+          <svg id="habitat-blueprint-svg" viewBox="0 0 700 260" preserveAspectRatio="xMidYMid meet" style="width:100%; height:230px;"></svg>
+        </div>
+      </div>
+
+      <!-- Main Cockpit: Systems Graph + Inspector & Objectives (Row 2) -->
+      <div class="row g-3 mb-3">
+        <!-- Interactive Dependency Graph -->
+        <div class="col-lg-8">
+          <div class="astro-card h-100">
+            <div class="card-header-astro">
+              <span><i class="bi bi-diagram-3-fill text-cyan me-2"></i>Engineering Consequence Explorer</span>
+              <span class="text-dim small font-monospace">INTERCONNECTED CASCADES (POWER -> ECLSS -> WATER -> CREW)</span>
+            </div>
+            <div class="p-3">
+              <div id="systems-graph-container" class="dependency-canvas-container">
+                <svg id="graph-svg-layer" class="graph-svg-layer"></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node Inspector Sidebar & Objectives -->
+        <div class="col-lg-4">
+          <!-- Subsystem Inspector Card -->
+          <div class="astro-card p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="fw-bold text-white mb-0" id="inspector-node-name" style="font-family: var(--font-title); font-size:1.1rem;">Power Generation</h6>
+              <span id="inspector-node-status" class="status-pill healthy">HEALTHY</span>
+            </div>
+            <p class="small text-secondary mb-2" id="inspector-node-desc">Supplies electrical energy for pumps, heaters, and scrubbers.</p>
+            <div id="inspector-node-val" class="mb-3"></div>
+
+            <div class="mb-2">
+              <div class="text-dim small font-monospace text-uppercase mb-1">Downstream Cascading Impacts:</div>
+              <div id="inspector-downstream-impacts"></div>
+            </div>
+
+            <div>
+              <div class="text-dim small font-monospace text-uppercase mb-1">Power / Hardware Inputs:</div>
+              <div id="inspector-depended-inputs"></div>
+            </div>
+          </div>
+
+          <!-- Objectives & Crew Vitals Card -->
+          <div class="astro-card p-3">
+            <div class="card-header-astro px-0 pt-0 mb-2 border-0 d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-person-lines-fill text-info me-1"></i>Crew Vitals & Objectives</span>
+              <span id="hud-crew-status" class="status-pill healthy">NOMINAL</span>
+            </div>
+            <div class="row g-2 mb-3 text-center">
+              <div class="col-6">
+                <div class="p-2 bg-dark rounded border border-secondary">
+                  <div class="text-dim small font-monospace">RADIATION DOSE</div>
+                  <div class="fw-bold text-warning font-monospace" id="hud-crew-rad">0.0 mSv</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 bg-dark rounded border border-secondary">
+                  <div class="text-dim small font-monospace">CREW COUNT</div>
+                  <div class="fw-bold text-white font-monospace" id="hud-crew-count">4 Astronauts</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-dim small font-monospace text-uppercase mb-2">Active Flight Objectives:</div>
+            <div id="hud-objectives-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission Log Terminal (Row 3) -->
+      <div class="astro-card p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="card-header-astro px-0 py-0 border-0">
+            <i class="bi bi-terminal-fill text-cyan me-1"></i>Flight Controller Telemetry Console
+          </span>
+          <span class="text-dim small font-monospace">REAL-TIME SIMULATION ENGINE LOG</span>
+        </div>
+        <div id="hud-log-box" class="log-terminal"></div>
+      </div>
+    </section>
+
+
+
+    <!-- VIEW E: MISSION DEBRIEF & REPLAY -->
+    <section id="view-debrief" class="view-section d-none">
+      <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+          <!-- Header -->
+          <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+            <div>
+              <div class="text-cyan font-monospace small mb-1" style="letter-spacing:0.1em;">MISSION COMPLETED &bull; FLIGHT DEBRIEF</div>
+              <h2 class="fw-bold text-white mb-0" id="debrief-outcome" style="font-family: var(--font-hud);">MISSION SUCCESS</h2>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-astro-secondary" id="btn-debrief-home">
+                <i class="bi bi-house me-1"></i>Home
+              </button>
+              <button class="btn btn-astro-primary" id="btn-launch-replay">
+                <i class="bi bi-arrow-repeat me-1"></i>Launch Counterfactual Replay
+              </button>
+            </div>
+          </div>
+
+          <!-- Score Card -->
+          <div class="astro-card p-4 mb-4">
+            <div class="row text-center g-3">
+              <div class="col-md-3 col-6">
+                <div class="text-dim small font-monospace text-uppercase">Final Score</div>
+                <div class="display-6 fw-bold text-cyan font-monospace" id="debrief-score">850</div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="text-dim small font-monospace text-uppercase">Cadet Rating</div>
+                <div class="fs-4 fw-bold text-success font-monospace" id="debrief-grade">A (Distinguished Flight Cadet)</div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="text-dim small font-monospace text-uppercase">Days Survived</div>
+                <div class="fs-4 fw-bold text-white font-monospace" id="debrief-days">10 / 10 Days</div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="text-dim small font-monospace text-uppercase">Objectives Achieved</div>
+                <div class="fs-4 fw-bold text-info font-monospace" id="debrief-objectives">4 / 4 Met</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Telemetry History Chart -->
+          <div class="astro-card p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold text-white mb-0" style="font-family: var(--font-title); font-size:1.2rem;">
+                <i class="bi bi-graph-up text-cyan me-2"></i>Resource Telemetry History Curve
+              </h5>
+              <span class="text-dim small font-monospace">FULL MISSION TIMELINE</span>
+            </div>
+            <div style="height: 320px; position: relative;">
+              <canvas id="chart-telemetry"></canvas>
+            </div>
+          </div>
+
+          <!-- Key Decisions Table -->
+          <div class="astro-card p-4 mb-4">
+            <h5 class="fw-bold text-white mb-3" style="font-family: var(--font-title); font-size:1.2rem;">
+              <i class="bi bi-list-check text-warning me-2"></i>Critical Tactical Decisions Log
+            </h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-striped align-middle mb-0">
+                <thead>
+                  <tr class="text-muted font-monospace small">
+                    <th>TIMELINE</th>
+                    <th>PROTOCOL CHOSEN</th>
+                    <th>IMMEDIATE OUTCOME</th>
+                    <th>SCIENTIFIC PRINCIPLE</th>
+                  </tr>
+                </thead>
+                <tbody id="debrief-decisions-table"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Lessons Learned & Recommended Next Challenge -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-7">
+              <div class="astro-card p-4 h-100">
+                <h5 class="fw-bold text-white mb-3" style="font-family: var(--font-title); font-size:1.2rem;">
+                  <i class="bi bi-mortarboard text-info me-2"></i>Lessons Learned & Pedagogical Insights
+                </h5>
+                <ul class="ps-3 mb-0" id="debrief-lessons-list"></ul>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="astro-card p-4 h-100">
+                <h5 class="fw-bold text-white mb-3" style="font-family: var(--font-title); font-size:1.2rem;">
+                  <i class="bi bi-trophy text-warning me-2"></i>Recommended Next Challenge
+                </h5>
+                <p class="text-light" id="debrief-next-challenge">Advance to Mars Intermediate Mission.</p>
+                <div class="border-top border-secondary pt-3 mt-3">
+                  <div class="text-dim small font-monospace">ASTRONAUT MENTALITY</div>
+                  <p class="small text-muted mb-0">Mistakes in simulation build the muscle memory required for real deep space survival.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Counterfactual Replay Comparison Section (Rendered on Replay Runs) -->
+          <div id="debrief-counterfactual-section" class="astro-card p-4 mb-4 border-cyan d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <span class="badge bg-dark border border-cyan text-cyan font-monospace mb-1">COUNTERFACTUAL ANALYSIS</span>
+                <h4 class="fw-bold text-white mb-0" style="font-family: var(--font-hud);">Original Strategy vs Alternative Replay</h4>
+              </div>
+              <div class="text-end">
+                <div class="text-dim small font-monospace">SCORE DELTA</div>
+                <div class="fs-4 font-monospace" id="cf-score-delta">+140 pts</div>
+              </div>
+            </div>
+
+            <p class="small text-muted mb-3">
+              <i class="bi bi-info-circle text-info me-1"></i>
+              Simulated Counterfactual Analysis: Evaluates how alternative crisis choices modified resource stability compared to your original flight path under identical initial conditions.
+            </p>
+
+            <div class="row g-3 mb-3">
+              <!-- Comparison Chart -->
+              <div class="col-lg-7">
+                <div class="p-3 bg-dark rounded border border-secondary">
+                  <div class="text-dim small font-monospace mb-2">CREW PHYSIOLOGICAL HEALTH TRAJECTORY</div>
+                  <div style="height: 250px; position: relative;">
+                    <canvas id="chart-counterfactual"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Causal Attribution -->
+              <div class="col-lg-5">
+                <div class="p-3 bg-dark rounded border border-secondary h-100">
+                  <div class="text-dim small font-monospace mb-2">CAUSAL OUTCOME ATTRIBUTION</div>
+                  <ul class="ps-3 small mb-3" id="cf-attribution-list"></ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Decision Divergences -->
+            <div>
+              <div class="text-dim small font-monospace mb-2">TACTICAL DECISION DIVERGENCES</div>
+              <div class="table-responsive">
+                <table class="table table-dark table-sm table-bordered align-middle mb-0">
+                  <thead>
+                    <tr class="text-muted font-monospace small">
+                      <th>DAY</th>
+                      <th>ORIGINAL RUN PROTOCOL</th>
+                      <th>REPLAY PROTOCOL</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cf-divergences-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- VIEW F: SCIENCE EXPLORER -->
+    <section id="view-science" class="view-section d-none">
+      <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+          <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+            <div>
+              <div class="text-cyan font-monospace small mb-1" style="letter-spacing:0.1em;">ACADEMIC & NASA KNOWLEDGE BASE</div>
+              <h2 class="fw-bold text-white mb-0" style="font-family: var(--font-hud);">Space Science & ECLSS Engineering Explorer</h2>
+            </div>
+            <button class="btn btn-astro-secondary" data-nav-view="landing">
+              <i class="bi bi-arrow-left me-1"></i>Back
+            </button>
+          </div>
+
+          <div class="alert alert-info bg-dark border-cyan text-light small mb-4">
+            <i class="bi bi-shield-check text-cyan me-2 fs-5"></i>
+            All scientific facts and parameters referenced in Mission Mirror are derived from open-access NASA technical reports, human spaceflight fact sheets, and planetary science publications. The simulator model transparently simplifies complex thermodynamic systems for student education.
+          </div>
+
+          <!-- Dynamic Topics Grid -->
+          <div class="row" id="science-topics-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-universe" class="view-section d-none">
+      <div class="universe-wrapper position-relative rounded-4 overflow-hidden border border-secondary" style="height: calc(100vh - 120px); min-height: 620px; background: #020409;">
+        <!-- Canvas Container for Three.js -->
+        <div id="universe-canvas-container" class="w-100 h-100"></div>
+
+        <!-- Top Flight Nav Control Header -->
+        <div class="position-absolute top-0 start-0 w-100 p-3 d-flex flex-wrap justify-content-between align-items-center" style="background: linear-gradient(180deg, rgba(2,4,9,0.92) 0%, rgba(2,4,9,0) 100%); pointer-events: none; z-index: 10;">
+          <div style="pointer-events: auto;">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-dark border border-cyan text-cyan font-monospace px-2 py-1">
+                <i class="bi bi-globe-americas me-1"></i>3D SOLAR SYSTEM
+              </span>
+              <span class="text-white fw-bold font-monospace small">VIRTUAL UNIVERSE NAVIGATOR</span>
+            </div>
+            <div class="text-dim font-monospace" style="font-size: 0.72rem;">
+              Click any celestial body to inspect telemetry, surface gravity & exploration status
+            </div>
+          </div>
+
+          <!-- Quick Planet Selector Pills -->
+          <div class="d-none d-md-flex align-items-center gap-1" style="pointer-events: auto;">
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="sun">Sun</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="mercury">Mercury</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="venus">Venus</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="earth">Earth</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick active" data-planet="moon">Moon</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="station">ISS Orbit</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="mars">Mars</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="jupiter">Jupiter</button>
+            <button class="btn btn-xs btn-outline-cyan btn-planet-quick" data-planet="saturn">Saturn</button>
+          </div>
+        </div>
+
+        <!-- Floating Destination Information Card (Bottom-Left / Overlay) -->
+        <div id="universe-planet-card" class="position-absolute bottom-0 start-0 m-3 p-3 astro-card border-cyan rounded-3 text-white" style="width: 380px; max-width: calc(100% - 30px); z-index: 10; backdrop-filter: blur(25px); background: rgba(7, 13, 30, 0.9);">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <h5 class="fw-bold mb-0 text-white font-monospace" id="planet-name">The Moon (Luna)</h5>
+              <div class="text-dim small font-monospace" id="planet-type">Natural Satellite</div>
+            </div>
+            <span id="planet-badge" class="badge bg-success-subtle text-success border border-success">MISSION READY</span>
+          </div>
+
+          <!-- Telemetry Specs Grid -->
+          <div class="row g-2 small py-2 border-top border-bottom border-secondary my-2 font-monospace">
+            <div class="col-6">
+              <span class="text-dim d-block" style="font-size:0.7rem;">SURFACE GRAVITY</span>
+              <strong id="planet-gravity" class="text-cyan">1.62 m/s²</strong>
+            </div>
+            <div class="col-6">
+              <span class="text-dim d-block" style="font-size:0.7rem;">SURFACE TEMP</span>
+              <strong id="planet-temp" class="text-white">-130&deg;C to +120&deg;C</strong>
+            </div>
+            <div class="col-6">
+              <span class="text-dim d-block" style="font-size:0.7rem;">ATMOSPHERE</span>
+              <strong id="planet-atmos" class="text-white">Vacuum</strong>
+            </div>
+            <div class="col-6">
+              <span class="text-dim d-block" style="font-size:0.7rem;">SOLAR DISTANCE</span>
+              <strong id="planet-dist" class="text-white">1.00 AU</strong>
+            </div>
+          </div>
+
+          <!-- Educational NASA Fact -->
+          <p class="small text-secondary mb-2" id="planet-fact" style="line-height: 1.45;">
+            Permanently shadowed craters at the lunar south pole hold gigatons of water ice.
+          </p>
+
+          <div class="text-dim font-monospace mb-2" style="font-size: 0.65rem;">
+            <i class="bi bi-info-circle me-1"></i>Educational Scale: Planetary sizes and orbital spacing visually compressed for interactive navigation.
+          </div>
+
+          <!-- Dynamic Action Buttons -->
+          <div id="planet-action-buttons"></div>
+        </div>
+
+        <!-- Navigation Controls Guide Overlay (Bottom-Right) -->
+        <div class="position-absolute bottom-0 end-0 m-3 p-2 rounded bg-dark border border-secondary text-dim font-monospace small d-none d-md-block" style="z-index: 5; font-size: 0.72rem; pointer-events: none;">
+          <div><i class="bi bi-mouse me-1"></i>Left Click + Drag: Orbit Camera</div>
+          <div><i class="bi bi-arrows-vertical me-1"></i>Mouse Wheel: Zoom Distance</div>
+          <div><i class="bi bi-cursor-fill me-1"></i>Click Celestial: Inspect & Explore</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-exploration" class="view-section d-none">
+      <div class="exploration-wrapper position-relative rounded-4 overflow-hidden border border-secondary" style="height: calc(100vh - 110px); min-height: 650px; background: #000;">
+        <!-- Three.js Canvas -->
+        <div id="exploration-canvas-container" class="w-100 h-100"></div>
+
+        <!-- FLIGHT HUD: Top Flight Telemetry Bar -->
+        <div class="position-absolute top-0 start-0 w-100 p-3 d-flex flex-wrap justify-content-between align-items-center" style="background: linear-gradient(180deg, rgba(3,6,17,0.92) 0%, rgba(3,6,17,0) 100%); z-index: 10; pointer-events: none;">
+          <!-- Environment & Mission Info -->
+          <div style="pointer-events: auto;">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge bg-dark border border-cyan text-cyan font-monospace px-2 py-1">
+                <i class="bi bi-person-walking me-1"></i>SURFACE EVA
+              </span>
+              <span id="hud-environment-title" class="text-white fw-bold font-monospace" style="letter-spacing:0.05em;">LUNAR SURFACE — SHACKLETON RIM</span>
+            </div>
+            <div id="hud-environment-sub" class="text-dim font-monospace" style="font-size: 0.72rem;">1/6g Gravity • Hard Vacuum • Cold Traps</div>
+            <div id="hud-mission-link-tag" class="mt-1"></div>
+          </div>
+
+          <!-- Compass & Controls -->
+          <div class="d-flex align-items-center gap-3" style="pointer-events: auto;">
+            <div class="rounded px-3 py-1 bg-dark border border-secondary text-center">
+              <div class="text-dim font-monospace" style="font-size: 0.62rem;">HEADING</div>
+              <div class="text-cyan font-monospace fw-bold" id="hud-compass-heading">0&deg;</div>
+            </div>
+            <button class="btn btn-sm btn-outline-cyan font-monospace" id="btn-hud-pause" title="Tactical Menu" style="color: #00f2fe !important; border-color: #00f2fe !important;">
+              <i class="bi bi-pause-fill me-1"></i>MENU
+            </button>
+          </div>
+
+          <!-- Telemetry Mini Gauges -->
+          <div class="d-none d-md-flex align-items-center gap-3" style="pointer-events: auto;">
+            <div style="width: 90px;">
+              <div class="d-flex justify-content-between text-dim font-monospace" style="font-size: 0.65rem;">
+                <span>O2 BUFFER</span>
+              </div>
+              <div class="progress" style="height: 6px; background:#0b1328;">
+                <div class="progress-bar bg-info" id="hud-bar-o2" style="width: 95%;"></div>
+              </div>
+            </div>
+            <div style="width: 90px;">
+              <div class="d-flex justify-content-between text-dim font-monospace" style="font-size: 0.65rem;">
+                <span>POWER GRID</span>
+              </div>
+              <div class="progress" style="height: 6px; background:#0b1328;">
+                <div class="progress-bar bg-primary" id="hud-bar-energy" style="width: 88%;"></div>
+              </div>
+            </div>
+            <div style="width: 90px;">
+              <div class="d-flex justify-content-between text-dim font-monospace" style="font-size: 0.65rem;">
+                <span>CREW STAMINA</span>
+              </div>
+              <div class="progress" style="height: 6px; background:#0b1328;">
+                <div class="progress-bar bg-success" id="hud-bar-health" style="width: 95%;"></div>
+              </div>
+            </div>
+            <div class="bg-dark border border-secondary px-3 py-1 rounded text-center">
+              <div class="text-dim font-monospace" style="font-size: 0.62rem;">MISSION SCORE</div>
+              <div class="text-cyan font-monospace fw-bold fs-6" id="hud-val-score">100</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Waypoint Objectives Tracker Panel (Top-Right) -->
+        <div class="position-absolute top-0 end-0 m-3 mt-5 pt-3 p-3 astro-card border-secondary rounded-3 text-white d-none d-sm-block" style="width: 320px; z-index: 10; backdrop-filter: blur(20px); background: rgba(7, 13, 30, 0.85);">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-dim font-monospace small"><i class="bi bi-crosshair me-1"></i>EVA WAYPOINT TARGETS</span>
+            <span class="badge bg-dark border border-cyan text-cyan font-monospace" style="font-size: 0.62rem;">3 OBJECTIVES</span>
+          </div>
+          <div id="hud-waypoint-list"></div>
+        </div>
+
+        <!-- Proximity Interaction Banner (Bottom-Center) -->
+        <div id="exploration-proximity-prompt" class="position-absolute bottom-0 start-50 translate-middle-x mb-5 p-3 rounded-pill bg-dark border border-cyan text-white shadow-lg d-none" style="z-index: 20; cursor: pointer; box-shadow: 0 0 25px rgba(0, 242, 254, 0.45) !important;">
+          <div class="d-flex align-items-center gap-3 px-2">
+            <i class="bi bi-broadcast text-cyan fs-5"></i>
+            <span id="proximity-prompt-text" class="font-monospace small">OBJECTIVE NEARBY — PRESS [E] TO INTERACT</span>
+            <button class="btn btn-sm btn-astro-primary rounded-pill px-3 py-1 font-monospace" style="font-size:0.75rem;">INTERACT</button>
+          </div>
+        </div>
+
+        <!-- Desktop Controls Help Overlay (Bottom-Left) -->
+        <div class="position-absolute bottom-0 start-0 m-3 p-2 rounded bg-dark border border-secondary text-dim font-monospace small d-none d-md-block" style="z-index: 5; font-size: 0.72rem; pointer-events: none;">
+          <div><kbd class="bg-secondary text-white">W</kbd><kbd class="bg-secondary text-white ms-1">A</kbd><kbd class="bg-secondary text-white ms-1">S</kbd><kbd class="bg-secondary text-white ms-1">D</kbd> or Arrows: Move Astronaut</div>
+          <div><kbd class="bg-secondary text-white">Space</kbd>: Low-Gravity Jump / Hop</div>
+          <div><kbd class="bg-secondary text-white">E</kbd>: Interact with Objectives</div>
+          <div><kbd class="bg-secondary text-white">Mouse Drag</kbd>: Rotate Camera • <kbd class="bg-secondary text-white">Wheel</kbd>: Zoom</div>
+          <div><kbd class="bg-secondary text-white">Esc</kbd> or <kbd class="bg-secondary text-white">P</kbd>: Pause & Navigation Menu</div>
+        </div>
+
+        <!-- Mobile Touch Controls Overlay (Visible on Touch / Small screens) -->
+        <div class="d-md-none position-absolute bottom-0 start-0 w-100 p-3 d-flex justify-content-between align-items-end" style="z-index: 15; pointer-events: none;">
+          <!-- Touch Joystick Base -->
+          <div id="touch-joystick-base" class="rounded-circle border border-cyan position-relative d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background: rgba(0,0,0,0.45); pointer-events: auto;">
+            <div id="touch-joystick-knob" class="rounded-circle bg-cyan" style="width: 36px; height: 36px; box-shadow: 0 0 10px #00f2fe;"></div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex gap-2" style="pointer-events: auto;">
+            <button id="touch-btn-jump" class="btn btn-dark border border-secondary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 58px; height: 58px; font-size: 0.75rem;">
+              HOP
+            </button>
+            <button id="touch-btn-interact" class="btn btn-dark border border-cyan text-cyan rounded-circle d-flex align-items-center justify-content-center fw-bold font-monospace" style="width: 58px; height: 58px; font-size: 0.72rem;">
+              [E]
+            </button>
+          </div>
+        </div>
+
+        <!-- TACTICAL PAUSE & SETTINGS MENU MODAL -->
+        <div id="exploration-pause-menu" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center d-none" style="background: rgba(3, 6, 17, 0.85); backdrop-filter: blur(15px); z-index: 30;">
+          <div class="astro-card border-cyan p-4 rounded-3 text-white text-center" style="width: 380px; max-width: 90%;">
+            <div class="mb-3">
+              <i class="bi bi-pause-circle-fill text-cyan fs-1"></i>
+              <h4 class="fw-bold font-monospace text-white mt-2 mb-0">EVA SIMULATION PAUSED</h4>
+              <div class="text-dim small font-monospace">TACTICAL MISSION NAVIGATION</div>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+              <button class="btn btn-astro-primary py-2" id="btn-pause-resume">
+                <i class="bi bi-play-fill me-1"></i>Resume Astronaut EVA
+              </button>
+              <button class="btn btn-outline-cyan py-2" id="btn-pause-universe" style="color: #00f2fe !important; border-color: #00f2fe !important;">
+                <i class="bi bi-globe-americas me-1"></i>Return to 3D Solar System
+              </button>
+              <button class="btn btn-outline-secondary py-2" id="btn-pause-dashboard">
+                <i class="bi bi-speedometer2 me-1"></i>Go to Mission Control
+              </button>
+            </div>
+
+            <div class="text-dim font-monospace small">
+              Press <kbd class="bg-dark text-cyan">Esc</kbd> or <kbd class="bg-dark text-cyan">P</kbd> at any time to toggle this tactical overlay.
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE OBJECTIVE DECISION MODAL -->
+        <div id="exploration-objective-modal" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center d-none" style="background: rgba(2, 4, 9, 0.85); backdrop-filter: blur(20px); z-index: 40;">
+          <div class="astro-card border-cyan p-4 rounded-4 text-white" style="width: 640px; max-width: 94%; max-height: 90vh; overflow-y: auto;">
+            <div class="d-flex justify-content-between align-items-start border-bottom border-secondary pb-3 mb-3">
+              <div>
+                <span class="badge bg-primary-subtle text-cyan border border-cyan font-monospace mb-1" id="modal-obj-target">Target • Category</span>
+                <h4 class="fw-bold font-monospace text-white mb-0" id="modal-obj-title">Objective Title</h4>
+              </div>
+              <button type="button" class="btn-close btn-close-white" id="btn-close-objective-modal"></button>
+            </div>
+
+            <!-- Description -->
+            <p class="text-secondary small mb-3" id="modal-obj-desc" style="line-height: 1.5;"></p>
+
+            <!-- NASA Science Concept Card -->
+            <div class="p-3 rounded-3 bg-dark border border-secondary mb-3">
+              <div class="text-cyan small fw-bold font-monospace mb-1">
+                <i class="bi bi-mortarboard me-1"></i>SCIENTIFIC PRINCIPLE:
+              </div>
+              <p class="text-white small mb-2" id="modal-obj-concept"></p>
+              <div class="text-dim small font-monospace" style="font-size: 0.72rem;">
+                <i class="bi bi-journal-bookmark me-1"></i><span id="modal-obj-fact"></span>
+              </div>
+            </div>
+
+            <h6 class="text-dim font-monospace small text-uppercase mb-2">Available Operational Responses:</h6>
+            <!-- Dynamic Choice Options -->
+            <div id="modal-obj-options"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- DYNAMIC ANOMALY / CRISIS MODAL -->
+  <div class="modal fade" id="anomaly-modal" tabindex="-1" aria-labelledby="modal-event-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border border-warning" style="background: var(--card-bg); backdrop-filter: blur(25px);">
+        <div class="modal-header border-secondary bg-dark">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-danger font-monospace" id="modal-event-severity">CRITICAL</span>
+            <h5 class="modal-title fw-bold text-white font-monospace" id="modal-event-title">Solar Radiation Storm</h5>
+          </div>
+        </div>
+        <div class="modal-body p-4">
+          <p class="text-light mb-4" id="modal-event-desc">
+            Deep space sensors detect a massive coronal mass ejection. Proton flux arriving in 2 hours.
+          </p>
+
+          <h6 class="text-muted small text-uppercase font-monospace mb-3">Select Response Protocol:</h6>
+          <div id="modal-event-choices"></div>
+        </div>
+        <div class="modal-footer border-secondary bg-dark d-flex justify-content-between">
+          <span class="text-dim small font-monospace"><i class="bi bi-shield-exclamation me-1"></i>Commander action required to proceed</span>
+          <button type="button" class="btn btn-astro-primary" id="btn-submit-event-decision">
+            <i class="bi bi-check2-circle me-1"></i>Execute Protocol Choice
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI MISSION MENTOR OFFCANVAS DRAWER -->
+  <div class="offcanvas offcanvas-end mentor-drawer text-white" tabindex="-1" id="mentor-offcanvas" style="width: 440px;">
+    <div class="offcanvas-header border-bottom border-secondary">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-robot text-cyan fs-4"></i>
+        <h5 class="offcanvas-title fw-bold font-monospace">Mission Mentor</h5>
+      </div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-dim small font-monospace">ANALYSIS SOURCE</span>
+        <span id="mentor-source-badge" class="badge bg-secondary text-light font-monospace">Rule-Based Physics Engine</span>
+      </div>
+
+      <div class="astro-card p-3 mb-3">
+        <div class="text-dim small font-monospace text-uppercase mb-1">What Changed:</div>
+        <div class="text-cyan small fw-bold" id="mentor-what-changed">Habitat telemetry nominal.</div>
+      </div>
+
+      <div class="astro-card p-3 mb-3">
+        <div class="text-dim small font-monospace text-uppercase mb-1">Why It Changed:</div>
+        <p class="text-light small mb-0" id="mentor-why-changed">Outpost operating within baseline margins.</p>
+      </div>
+
+      <div class="astro-card p-3 mb-3">
+        <div class="text-dim small font-monospace text-uppercase mb-1">Affected Systems:</div>
+        <div id="mentor-affected-systems" class="mt-1">
+          <span class="badge bg-dark border border-secondary text-muted">None</span>
+        </div>
+      </div>
+
+      <div class="astro-card p-3 mb-3">
+        <div class="text-dim small font-monospace text-uppercase mb-1">What Cadet Should Monitor Next:</div>
+        <p class="text-warning small mb-0" id="mentor-what-monitor">Monitor battery levels and oxygen scrubber efficiency.</p>
+      </div>
+
+      <div class="astro-card p-3 border-cyan">
+        <div class="text-dim small font-monospace text-uppercase mb-1"><i class="bi bi-mortarboard text-cyan me-1"></i>Scientific Principle:</div>
+        <p class="text-light small mb-0 fw-bold" id="mentor-scientific-concept">ECLSS closed-loop conservation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS MODAL -->
+  <div class="modal fade" id="how-it-works-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-secondary text-white" style="background: var(--card-bg); backdrop-filter: blur(25px);">
+        <div class="modal-header border-secondary bg-dark">
+          <h5 class="modal-title fw-bold font-monospace text-cyan"><i class="bi bi-info-circle me-2"></i>How Mission Mirror Works</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="mb-4">
+            <h6 class="text-white fw-bold"><i class="bi bi-1-circle text-cyan me-2"></i>1. Plan Your Outpost Budget</h6>
+            <p class="text-secondary small">Allocate 100 simulation credits among 6 sectors: Power, Life Support, Water Recycling, Food Production, Radiation Shielding, and Emergency Reserves. Every credit choice involves real engineering trade-offs.</p>
+          </div>
+          <div class="mb-4">
+            <h6 class="text-white fw-bold"><i class="bi bi-2-circle text-cyan me-2"></i>2. Navigate Daily Operations & Cascading Physics</h6>
+            <p class="text-secondary small">Subsystems are interconnected: if your power drops below 25%, life-support scrubbers and water pumps lose efficiency, starving your crew of oxygen and triggering dehydration. Click on the <strong>Engineering Consequence Explorer</strong> to inspect connections.</p>
+          </div>
+          <div class="mb-4">
+            <h6 class="text-white fw-bold"><i class="bi bi-3-circle text-cyan me-2"></i>3. Dynamic Emergencies & Triage Decisions</h6>
+            <p class="text-secondary small">Face 6 unpredictable space anomalies including coronal mass ejections, filtration clogs, and pressure seal leaks. Choose between spending emergency reserves, overclocking power, or accepting crew fatigue.</p>
+          </div>
+          <div>
+            <h6 class="text-white fw-bold"><i class="bi bi-4-circle text-cyan me-2"></i>4. Counterfactual Replay & Learning</h6>
+            <p class="text-secondary small">At any point, launch a counterfactual replay of your exact mission. Make different choices to discover whether conserving spare parts or spending energy earlier would have saved the mission.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MISSION ARCHIVE MODAL -->
+  <div class="modal fade" id="archive-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-secondary text-white" style="background: var(--card-bg); backdrop-filter: blur(25px);">
+        <div class="modal-header border-secondary bg-dark">
+          <h5 class="modal-title fw-bold font-monospace text-cyan"><i class="bi bi-clock-history me-2"></i>Mission Flight Archives (SQLite)</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div id="archive-mission-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js CDN v0.160.0 for 3D Virtual Universe & Planetary Exploration -->
+  <script src="js/three.min.js"></script>
+  <!-- Three.js GLTFLoader for Authentic NASA 3D Astronaut Model -->
+  <script src="js/GLTFLoader.js?v=3.0"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Mission Mirror Application JS Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/starfield.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/universe_view.js"></script>
+  <script src="js/astronaut_preview.js?v=3.0"></script>
+  <script src="js/astronaut_controller.js?v=3.0"></script>
+  <script src="js/exploration_environments.js"></script>
+  <script src="js/exploration_hud.js"></script>
+  <script src="js/planner.js"></script>
+  <script src="js/habitat_view.js"></script>
+  <script src="js/systems_graph.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/replay.js"></script>
+  <script src="js/science.js"></script>
+  <script src="js/app.js?v=3.0"></script>
+</body>
+</html>

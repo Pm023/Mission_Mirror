@@ -1,0 +1,34 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.cache/
+
+# Virtual Environments
+.env
+.venv/
+venv/
+env/
+ENV/
+
+# Databases & Runtime State (re-created automatically on launch)
+*.db
+*.sqlite
+*.sqlite3
+mission_mirror.db
+
+# IDE & OS temporary files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
