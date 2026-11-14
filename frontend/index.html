@@ -19,6 +19,10 @@
 
   <!-- Top Aerospace Navigation Header -->
   <header class="nasa-header sticky-top py-2 px-3">
+    <!-- Hamburger menu for mobile -->
+    <button class="menu-toggle d-lg-none" aria-label="Menu" style="background:none;border:none;color:#cbd5e1;font-size:1.5rem;">
+        &#x22EE; <!-- three vertical dots -->
+    </button>
     <div class="container-fluid d-flex justify-content-between align-items-center position-relative" style="z-index: 10;">
       <div class="d-flex align-items-center gap-3">
         <a href="#" class="d-flex align-items-center gap-2 text-decoration-none" data-nav-view="landing">
@@ -34,7 +38,7 @@
       </div>
 
       <!-- Navigation Pill Links -->
-      <nav class="d-flex align-items-center gap-2">
+      <nav class="d-none d-lg-flex align-items-center gap-2">
         <button class="nav-tab-btn active" data-nav-view="landing">
           <i class="bi bi-house-door"></i> Home
         </button>
