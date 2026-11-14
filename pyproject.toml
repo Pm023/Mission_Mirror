@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mission-mirror"
+version = "0.1.0"
+description = "Junior Astronaut Mission Trainer – FastAPI backend + static UI"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+
+# Runtime dependencies – keep them in sync with requirements.txt
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "httpx>=0.27.0"
+]
+
+[tool.vercel]
+framework = "fastapi"
+entrypoint = "backend.app.main:app"
