@@ -44,6 +44,29 @@
 }
 
 /* Global High-Contrast Readability Overrides */
+
+/* ---------- Mobile view enhancements (additional) ---------- */
+@media (max-width: 576px) {
+  /* Ensure navigation tabs wrap and stay on a single row without overflow */
+  .nav {
+    flex-wrap: wrap !important;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+  .nav-tab-btn {
+    flex: 1 1 auto;
+    margin: 0.2rem !important;
+    font-size: 0.9rem !important;
+    padding: 0.4rem 0.6rem !important;
+    white-space: nowrap;
+  }
+  /* Reduce horizontal padding on the main container */
+  .container-fluid {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
 .text-muted {
   color: #cbd5e1 !important;
 }
