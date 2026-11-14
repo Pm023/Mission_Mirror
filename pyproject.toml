@@ -20,3 +20,4 @@ dependencies = [
 [tool.vercel]
 framework = "fastapi"
 entrypoint = "backend.app.main:app"
+
