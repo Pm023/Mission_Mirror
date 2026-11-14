@@ -45,7 +45,71 @@
 
 /* Global High-Contrast Readability Overrides */
 
-/* ---------- Mobile view enhancements (additional) ---------- */
+/* Mobile row fix to prevent overflow */
+@media (max-width: 576px) {
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .mobile-sidebar {
+    display: block;
+  }
+  .mobile-overlay {
+    display: block;
+  }
+}
+
+@media (min-width: 577px) {
+  .mobile-sidebar,
+  .mobile-overlay {
+    display: none !important;
+  }
+}
+
+.mobile-sidebar .nav {
+  flex-direction: column;
+  width: 100%;
+}
+
+.mobile-sidebar .nav-tab-btn {
+  width: 100% !important;
+  justify-content: flex-start !important;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+html, body, .container-fluid {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+/* Adjust canvas to avoid 100vw issue */
+#space-starfield-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Style mobile menu button for visibility */
+.menu-toggle {
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: #cbd5e1;
+  background: none;
+  border: none;
+  position: relative;
+  z-index: 1100;
+}
+
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: #cbd5e1;
+  background: none;
+  border: none;
+}
+
 @media (max-width: 576px) {
   /* Prevent any horizontal scrolling */
   html, body {
