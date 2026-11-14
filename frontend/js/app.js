@@ -128,6 +128,108 @@ function setupNavigation() {
       }
     });
   }
+
+  // Mobile menu handling
+  const toggleBtn = document.querySelector('.menu-toggle');
+  const sidebar = document.getElementById('mobileSidebar');
+  const overlay = document.getElementById('mobileOverlay');
+  if (toggleBtn && sidebar && overlay) {
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.add('open');
+      overlay.classList.add('show');
+    });
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+    sidebar.querySelectorAll('.nav-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      });
+    });
+  }
+}
+  document.querySelectorAll('[data-nav-view]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof FlightAudio !== 'undefined') FlightAudio.playClick();
+      const targetView = el.dataset.navView;
+      AppState.setView(targetView);
+
+      // Update active nav link style
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.querySelector(`.nav-tab-btn[data-nav-view="${targetView}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+    });
+  });
+
+  // Universe quick planet selector pills
+  document.querySelectorAll('.btn-planet-quick').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (typeof FlightAudio !== 'undefined') FlightAudio.playClick();
+      document.querySelectorAll('.btn-planet-quick').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const planetId = btn.dataset.planet;
+      if (typeof UniverseView !== 'undefined') {
+        UniverseView.focusPlanet(planetId);
+      }
+    });
+  });
+
+  // Hero & Dashboard EVA Exploration Shortcuts
+  const heroEvaBtn = document.getElementById('btn-hero-launch-eva');
+  if (heroEvaBtn) {
+    heroEvaBtn.addEventListener('click', () => {
+      if (typeof FlightAudio !== 'undefined') FlightAudio.playTelemetryChirp();
+      if (typeof ExplorationHUD !== 'undefined') {
+        ExplorationHUD.startExploration('moon');
+      }
+    });
+  }
+
+  const dashLaunchBtn = document.getElementById('btn-dashboard-launch-eva');
+  if (dashLaunchBtn) {
+    dashLaunchBtn.addEventListener('click', () => {
+      if (typeof FlightAudio !== 'undefined') FlightAudio.playTelemetryChirp();
+      const dest = (AppState.currentMission && AppState.currentMission.destination) ? AppState.currentMission.destination : 'moon';
+      if (typeof ExplorationHUD !== 'undefined') {
+        ExplorationHUD.startExploration(dest);
+      }
+    });
+  }
+
+  // Dashboard EVA Exploration Shortcut
+  const dashboardEvaBtn = document.getElementById('btn-dashboard-eva');
+  if (dashboardEvaBtn) {
+    dashboardEvaBtn.addEventListener('click', () => {
+      if (typeof FlightAudio !== 'undefined') FlightAudio.playTelemetryChirp();
+      const dest = (AppState.currentMission && AppState.currentMission.destination) ? AppState.currentMission.destination : 'moon';
+      if (typeof ExplorationHUD !== 'undefined') {
+        ExplorationHUD.startExploration(dest);
+      }
+    });
+  }
+
+  const startBtn = document.getElementById('btn-hero-start');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      if (typeof FlightAudio !== 'undefined') FlightAudio.playTelemetryChirp();
+      AppState.setView('briefing');
+    });
+  }
+
+  const howBtn = document.getElementById('btn-hero-how');
+  if (howBtn) {
+    howBtn.addEventListener('click', () => {
+      if (typeof FlightAudio !== 'undefined') FlightAudio.playClick();
+      const modalEl = document.getElementById('how-it-works-modal');
+      if (modalEl && window.bootstrap) {
+        const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        bsModal.show();
+      }
+    });
+  }
 }
 
 function setupBriefing() {
