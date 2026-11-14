@@ -47,6 +47,33 @@
 
 /* ---------- Mobile view enhancements (additional) ---------- */
 @media (max-width: 576px) {
+  /* Prevent any horizontal scrolling */
+  html, body {
+    overflow-x: hidden !important;
+  }
+  /* Navigation container – force full width and wrap tabs */
+  nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    margin: 0 auto;
+  }
+  .nav-tab-btn {
+    flex: 0 1 auto;
+    margin: 0.2rem !important;
+    font-size: 0.85rem !important;
+    padding: 0.35rem 0.6rem !important;
+    white-space: nowrap;
+  }
+  /* Reduce horizontal padding on the main container */
+  .container-fluid {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
   /* Ensure navigation tabs wrap and stay on a single row without overflow */
   .nav {
     flex-wrap: wrap !important;
@@ -908,6 +935,33 @@ main.container-fluid {
 
 /* ---------- Mobile view enhancements ---------- */
 @media (max-width: 576px) {
+  /* Prevent any horizontal scrolling */
+  html, body {
+    overflow-x: hidden !important;
+  }
+  /* Navigation container – force full width and wrap tabs */
+  nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    margin: 0 auto;
+  }
+  .nav-tab-btn {
+    flex: 0 1 auto;
+    margin: 0.2rem !important;
+    font-size: 0.85rem !important;
+    padding: 0.35rem 0.6rem !important;
+    white-space: nowrap;
+  }
+  /* Reduce horizontal padding on the main container */
+  .container-fluid {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
   /* Increase contrast for text elements */
   .text-muted,
   .text-dim,
