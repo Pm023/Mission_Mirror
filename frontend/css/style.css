@@ -882,3 +882,38 @@ main.container-fluid {
   box-shadow: 0 0 18px rgba(0, 242, 254, 0.35) !important;
   transform: translateY(-2px);
 }
+
+/* ---------- Mobile view enhancements ---------- */
+@media (max-width: 576px) {
+  /* Increase contrast for text elements */
+  .text-muted,
+  .text-dim,
+  .text-secondary {
+    color: #cbd5e1 !important; /* light gray */
+  }
+  .bg-dark {
+    background-color: #060d20 !important;
+    color: #f8fafc !important;
+  }
+  /* Enlarge headings and buttons for readability */
+  h1, h2, h3, h4, h5, h6 {
+    font-size: 1.2em !important;
+  }
+  .btn {
+    font-size: 0.95rem !important;
+    padding: 0.6rem 1rem !important;
+  }
+  /* Ensure badges are readable */
+  .badge {
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.5rem !important;
+  }
+  /* Adjust card layout for small screens */
+  .astro-card {
+    padding: 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+  .nasa-header {
+    padding: 0.5rem 1rem !important;
+  }
+}
